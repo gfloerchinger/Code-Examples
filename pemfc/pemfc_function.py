@@ -26,18 +26,22 @@ def residual(t, SV, pars, ptr):
     # Butler-Vollmer equation:
     i_Far_an = -pars.i_o_an*(exp(-pars.n_an*F*pars.beta_an*eta_an/R/pars.T)
                       - exp(pars.n_an*F*(1-pars.beta_an)*eta_an/R/pars.T))
-
+    #print(eta_an)
     # Double layer current density (per unit area surface)
     i_dl_an = -pars.i_ext*pars.A_fac_dl - i_Far_an*pars.f_Pt
 
     # Change in double layer potential per time:
     dSV_dt[ptr.phi_dl_an] = -i_dl_an/pars.C_dl_an
 
+
+
     # GDL gas phase:
     C_k_an_GDL = SV[ptr.C_k_an_GDL]
+    print(C_k_an_GDL)
     # Catalyst layer gas phase
     C_k_an_CL = SV[ptr.C_k_an_CL]
-   
+    print(C_k_an_CL)
+    
     s1 = {'C_k': C_k_an_GDL, 'dy':pars.dy_GDL, 'eps_g':pars.eps_g_GDL, 
         'n_Brugg':pars.n_Brugg_GDL, 'd_solid':pars.d_solid_GDL}
     s2 = {'C_k': C_k_an_CL, 'dy':pars.dy_CL, 'eps_g':pars.eps_g_CL,
@@ -45,7 +49,7 @@ def residual(t, SV, pars, ptr):
     gas_props = {'T':pars.T, 'D_k':pars.D_k_g_an, 'mu':pars.mu_g_an}
     
     N_k_i = pemfc_gas_flux(s1, s2, gas_props)
-    # print(N_k_i)
+    #print(N_k_i)
     
     # Molar production rates due to Faradaic current:
     sdot_k = i_Far_an*pars.nu_k_an/pars.n_an/F
@@ -97,10 +101,14 @@ def pemfc_gas_flux(node1, node2, gas_props):
     dY = 0.5*(node1['dy'] + node2['dy'])
 
     V_conv = -K_g*(P_2 - P_1)/dY/gas_props['mu']
+    #print(V_conv)
     V_k_diff = -D_k_eff*(X_k_2 - X_k_1)/dY/X_k_int
-
+    #print(V_k_diff)
     V_k  = V_conv + V_k_diff
 
     N_k = C_int*X_k_int*V_k
+    
+    print(X_k_1,X_k_2)
+    print(N_k)
 
     return N_k

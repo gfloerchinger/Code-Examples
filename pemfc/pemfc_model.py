@@ -12,6 +12,7 @@
         3 - The simulation then returns the solution vector at the end of the 
             integration, which can be processed as needed to plot or analyze any quantities of interest.
 """
+import numpy as np
 
 def pemfc_model(i_ext=None):
     # Import necessary modules:
@@ -37,3 +38,25 @@ def pemfc_model(i_ext=None):
 #    call the pemfc_model function, above
 if __name__ == '__main__':
     pemfc_model()
+    
+    
+solution = pemfc_model(1000) 
+    
+ ##################################   
+    
+    
+# i_array = np.linspace(0.00000001,100000,50)
+# V_cell = np.zeros_like(i_array)
+
+# for j, current in enumerate(i_array):
+#     print(current)
+#     solution = pemfc_model(current)
+#     V_cell[j] = solution.y[-1,-1] - solution.y[0,-1]
+#     print(V_cell[j])
+
+
+# from matplotlib import pyplot as plt
+
+# plt.plot(i_array,V_cell,'.')
+# plt.savefig('results/polarization.png',dpi=350)
+# plt.show()
